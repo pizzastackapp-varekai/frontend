@@ -2,7 +2,7 @@ import { FooterLink } from '../footer-link/footer-link.component'
 
 export const Footer = () => {
 	return (
-		<div className="bg-gray-900 p-12">
+		<div className="bg-gray-900 p-12 mt-autow">
 			<div className="mb-4">
 				<span className="uppercase font-bold text-sm text-zinc-500">
 					Контакти
