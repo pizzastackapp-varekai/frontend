@@ -1,8 +1,8 @@
 export interface Pizza {
 	id: number
 	image: string
-	weight: number
+	weight?: number
 	title: string
-	ingredients: string
+	ingredients?: string | null
 	price: number
 }
