@@ -8,12 +8,21 @@ export default {
 
 const Template: ComponentStory<typeof MenuItem> = args => <MenuItem {...args} />
 
-export const View = Template.bind({})
-View.args = {
-	image: '/assets/pizza/manhattan.jpeg',
+export const General = Template.bind({})
+General.args = {
+	image: 'menu/menu-1668466379',
 	weight: 555,
 	title: 'Піца Мангеттен',
 	ingredients:
 		'(подвійна порція грибів), Гриби, Моцарела, Пепероні, Соус Альфредо',
 	price: 215,
+}
+
+export const Drink = Template.bind({})
+Drink.args = {
+	image: 'menu/menu-1669556344',
+	price: 400,
+	title: 'Cola',
+	ingredients: null,
+	fitImage: true,
 }

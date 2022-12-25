@@ -6,6 +6,26 @@ export default {
 	component: Header,
 } as ComponentMeta<typeof Header>
 
-const Template: ComponentStory<typeof Header> = () => <Header />
+const Template: ComponentStory<typeof Header> = args => <Header {...args} />
 
 export const View = Template.bind({})
+View.args = {
+	categories: [
+		{
+			id: 'a9900353-096a-41f1-a360-6ae55000961e',
+			slug: 'pizza',
+			title: 'Піца',
+		},
+		{
+			id: 'b7308596-bc63-4e23-abf1-7d0853c93fe9',
+			slug: 'drinks',
+			title: 'Напої',
+		},
+	],
+}
+
+export const Loading = Template.bind({})
+
+Loading.args = {
+	isLoading: true,
+}

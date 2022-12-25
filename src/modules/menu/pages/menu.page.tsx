@@ -1,10 +1,11 @@
 import { ShowInfo } from '@app/common/components/show-info/show-info.component'
-import { useGetMenuQuery } from '@app/core/types'
+import { useGetMenuQuery, useGetSettingsQuery } from '@app/core/types'
+import { MenuCategory } from '../components/menu-category/menu-category.component'
 import { MenuItemListLoading } from '../components/menu-item-list-loading/menu-item-list-loading.component'
-import { MenuList } from '../components/menu-list/menu-list.component'
 
 export const MenuPage = () => {
 	const { data, loading, error } = useGetMenuQuery()
+	const { loading: loadingSettings } = useGetSettingsQuery()
 	if (error) {
 		return (
 			<ShowInfo type="error">
@@ -13,7 +14,7 @@ export const MenuPage = () => {
 			</ShowInfo>
 		)
 	}
-	if (loading) {
+	if (loading || loadingSettings) {
 		return <MenuItemListLoading items={9} />
 	}
 	if (!data) {
@@ -24,5 +25,11 @@ export const MenuPage = () => {
 		)
 	}
 
-	return <MenuList items={data?.menu} />
+	return (
+		<div className="flex flex-col gap-12">
+			{data.categories.map(category => (
+				<MenuCategory data={category} key={category.id} />
+			))}
+		</div>
+	)
 }
