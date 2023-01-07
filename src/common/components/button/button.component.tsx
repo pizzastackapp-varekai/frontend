@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { FC, PropsWithChildren } from 'react'
+import { ComponentProps, FC, PropsWithChildren } from 'react'
 
 enum ButtonSize {
 	sm = 'sm',
@@ -14,7 +14,8 @@ enum ButtonVariant {
 interface ButtonProps {
 	size?: keyof typeof ButtonSize
 	disabled?: boolean
-	variant: keyof typeof ButtonVariant
+	variant?: keyof typeof ButtonVariant
+	type?: ComponentProps<'button'>['type']
 }
 
 export const Button: FC<PropsWithChildren<ButtonProps>> = ({
