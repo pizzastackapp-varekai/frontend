@@ -16,6 +16,7 @@ interface ButtonProps {
 	disabled?: boolean
 	variant?: keyof typeof ButtonVariant
 	type?: ComponentProps<'button'>['type']
+	onClick?: ComponentProps<'button'>['onClick']
 }
 
 export const Button: FC<PropsWithChildren<ButtonProps>> = ({
@@ -23,6 +24,7 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
 	size = ButtonSize.base,
 	disabled,
 	variant = ButtonVariant.primary,
+	...props
 }) => {
 	const ButtonClasses = clsx(
 		'text-sm text-gray-900 px-4 transition-all rounded-md',
@@ -38,7 +40,7 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
 	)
 	return (
 		<div>
-			<button className={ButtonClasses} disabled={disabled}>
+			<button className={ButtonClasses} disabled={disabled} {...props}>
 				{children}
 			</button>
 		</div>

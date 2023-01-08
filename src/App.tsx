@@ -7,7 +7,7 @@ export const App = () => {
 	const { data, loading } = useGetCategoriesQuery()
 	return (
 		<div className="flex flex-col min-h-screen">
-			<Header isLoading={loading} categories={data?.categories} />
+			<Header isLoading={loading} categories={data?.categories} isLoggedin />
 			<div className="mx-12 mb-24 my-24">
 				<MenuPage />
 			</div>
