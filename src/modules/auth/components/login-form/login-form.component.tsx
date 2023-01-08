@@ -1,81 +1,30 @@
 import { Button } from '@app/common/components/button/button.component'
 import { Input } from '@app/common/components/input/input.component'
 import { FC, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { Controller } from 'react-hook-form'
+
 import { Counter } from '@app/common/components/counter/counter.component'
-import { phoneRegex } from '@app/common/utils/regex'
+
 import { toast } from 'react-toastify'
-
-interface LoginFormProps {
-	onFirstStepCallback: (phoneNumber: string) => Promise<void>
-	onSecondStepCallback: (phoneNumber: string, code: string) => Promise<void>
-}
-
-interface LoginFormValues {
-	phoneNumber: string
-	code: string
-}
-
-enum LoginFormStep {
-	first = 'first',
-	second = 'second',
-}
-
-type LoginFormStepKeys = keyof typeof LoginFormStep
-
-const generateValidationSchema = (step: LoginFormStepKeys) => {
-	const baseValidation = {
-		phoneNumber: yup
-			.string()
-			.trim()
-			.matches(phoneRegex, 'Введіть коректний номер телефону')
-			.required('Введіть телефонний номер'),
-	}
-	if (step === LoginFormStep.first) {
-		return yup.object(baseValidation)
-	}
-	return yup.object({
-		...baseValidation,
-		code: yup.string().trim().required('Введіть код з SMS'),
-	})
-}
+import {
+	LoginFormProps,
+	LoginFormStep,
+	LoginFormStepKeys,
+} from './login-form.types'
+import { useLoginForm } from './use-login-form'
 
 export const LoginForm: FC<LoginFormProps> = ({
 	onFirstStepCallback,
 	onSecondStepCallback,
 }) => {
 	const [step, setStep] = useState<LoginFormStepKeys>(LoginFormStep.first)
-	const {
-		control,
-		handleSubmit,
-		getValues,
-		formState: { isSubmitting },
-	} = useForm<LoginFormValues>({
-		resolver: yupResolver(generateValidationSchema(step)),
-		defaultValues: {
-			phoneNumber: '',
-			code: '',
-		},
-	})
 
-	const submitForm = async (values: LoginFormValues) => {
-		try {
-			if (step === LoginFormStep.first) {
-				if (onFirstStepCallback !== undefined) {
-					await onFirstStepCallback(values.phoneNumber)
-				}
-				setStep(LoginFormStep.second)
-				return
-			}
-			if (onSecondStepCallback !== undefined) {
-				await onSecondStepCallback(values.phoneNumber, values.code)
-			}
-		} catch (error) {
-			toast.error((error as Error).message)
-		}
-	}
+	const { getValues, onSubmit, control, isSubmitting } = useLoginForm(
+		step,
+		setStep,
+		onFirstStepCallback,
+		onSecondStepCallback
+	)
 
 	const OnResend = async () => {
 		const phoneNumber = getValues('phoneNumber')
@@ -89,7 +38,7 @@ export const LoginForm: FC<LoginFormProps> = ({
 	}
 	return (
 		<div className="w-112 py-8 px-10 bg-white rounded-lg border border-gray-300 shadow mx-auto">
-			<form onSubmit={handleSubmit(submitForm)}>
+			<form onSubmit={onSubmit}>
 				<div className="flex gap-2 flex-col">
 					<Controller
 						control={control}

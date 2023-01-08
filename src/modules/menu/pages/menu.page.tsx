@@ -1,5 +1,6 @@
 import { ShowInfo } from '@app/common/components/show-info/show-info.component'
 import { useGetMenuQuery, useGetSettingsQuery } from '@app/core/types'
+import { Helmet } from 'react-helmet'
 import { MenuCategory } from '../components/menu-category/menu-category.component'
 import { MenuItemListLoading } from '../components/menu-item-list-loading/menu-item-list-loading.component'
 
@@ -26,10 +27,15 @@ export const MenuPage = () => {
 	}
 
 	return (
-		<div className="flex flex-col gap-12">
-			{data.categories.map(category => (
-				<MenuCategory data={category} key={category.id} />
-			))}
-		</div>
+		<>
+			<Helmet>
+				<title>Меню</title>
+			</Helmet>
+			<div className="flex flex-col gap-12">
+				{data.categories.map(category => (
+					<MenuCategory data={category} key={category.id} />
+				))}
+			</div>
+		</>
 	)
 }
