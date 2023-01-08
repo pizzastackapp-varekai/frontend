@@ -6,8 +6,12 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Counter } from '@app/common/components/counter/counter.component'
 import { phoneRegex } from '@app/common/utils/regex'
+import { toast } from 'react-toastify'
 
-interface LoginFormProps {}
+interface LoginFormProps {
+	onFirstStepCallback: (phoneNumber: string) => Promise<void>
+	onSecondStepCallback: (phoneNumber: string, code: string) => Promise<void>
+}
 
 interface LoginFormValues {
 	phoneNumber: string
@@ -38,9 +42,17 @@ const generateValidationSchema = (step: LoginFormStepKeys) => {
 	})
 }
 
-export const LoginForm: FC<LoginFormProps> = () => {
+export const LoginForm: FC<LoginFormProps> = ({
+	onFirstStepCallback,
+	onSecondStepCallback,
+}) => {
 	const [step, setStep] = useState<LoginFormStepKeys>(LoginFormStep.first)
-	const { control, handleSubmit } = useForm<LoginFormValues>({
+	const {
+		control,
+		handleSubmit,
+		getValues,
+		formState: { isSubmitting },
+	} = useForm<LoginFormValues>({
 		resolver: yupResolver(generateValidationSchema(step)),
 		defaultValues: {
 			phoneNumber: '',
@@ -48,13 +60,32 @@ export const LoginForm: FC<LoginFormProps> = () => {
 		},
 	})
 
-	const submitForm = (values: LoginFormValues) => {
-		if (step === LoginFormStep.first) {
-			setStep(LoginFormStep.second)
-			return
+	const submitForm = async (values: LoginFormValues) => {
+		try {
+			if (step === LoginFormStep.first) {
+				if (onFirstStepCallback !== undefined) {
+					await onFirstStepCallback(values.phoneNumber)
+				}
+				setStep(LoginFormStep.second)
+				return
+			}
+			if (onSecondStepCallback !== undefined) {
+				await onSecondStepCallback(values.phoneNumber, values.code)
+			}
+		} catch (error) {
+			toast.error((error as Error).message)
 		}
+	}
 
-		console.log('values', values)
+	const OnResend = async () => {
+		const phoneNumber = getValues('phoneNumber')
+		if (onFirstStepCallback) {
+			try {
+				await onFirstStepCallback(phoneNumber)
+			} catch (error) {
+				toast.error((error as Error).message)
+			}
+		}
 	}
 	return (
 		<div className="w-112 py-8 px-10 bg-white rounded-lg border border-gray-300 shadow mx-auto">
@@ -65,6 +96,7 @@ export const LoginForm: FC<LoginFormProps> = () => {
 						name="phoneNumber"
 						render={({ field, fieldState }) => (
 							<Input
+								disabled={step === LoginFormStep.second}
 								label="Teлефон"
 								placeholder="+380671111111"
 								fullWidth
@@ -89,13 +121,13 @@ export const LoginForm: FC<LoginFormProps> = () => {
 						/>
 					)}
 					<div className="text-center">
-						<Button type="submit">
+						<Button type="submit" disabled={isSubmitting}>
 							{step === LoginFormStep.first ? 'Отримати код' : ' Увійти'}
 						</Button>
 					</div>
 					<div>
 						{step === LoginFormStep.second && (
-							<Counter onRestart={() => console.log('restart')}>
+							<Counter intervalTime={60} onRestart={OnResend}>
 								Відправити код ще раз
 							</Counter>
 						)}

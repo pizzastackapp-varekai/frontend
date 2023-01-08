@@ -8,23 +8,25 @@ import {
 } from 'react'
 
 interface CounterProps {
-	onRestart?: () => void
+	onRestart: () => void
+	intervalTime?: number
 }
 
 export const Counter: FC<PropsWithChildren<CounterProps>> = ({
 	children,
 	onRestart,
+	intervalTime = 60,
 }) => {
-	const [counter, setCounter] = useState(60)
+	const [counter, setCounter] = useState(intervalTime)
 	const [isDisabled, setDisabled] = useState(false)
 
 	const counterRef = useRef<NodeJS.Timer>()
 
 	const startCounter = (event?: MouseEvent<HTMLButtonElement>) => {
 		if (event) {
-			onRestart && onRestart()
+			onRestart()
 		}
-		setCounter(60)
+		setCounter(intervalTime)
 		setDisabled(true)
 		counterRef.current = setInterval(() => {
 			setCounter(counter => counter - 1)

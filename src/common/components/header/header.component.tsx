@@ -8,7 +8,7 @@ import { HeaderCategoryLink } from '../link/link.component'
 import { Skeleton } from '../skeleton/skeleton.component'
 interface HeaderProps {
 	isLoading?: boolean
-	categories?: Omit<Categories, 'menu_items'>[]
+	categories?: Omit<Categories, 'menu_items' | 'menu_items_aggregate'>[]
 	isLoggedin?: boolean
 }
 
