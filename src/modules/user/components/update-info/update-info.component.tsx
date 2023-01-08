@@ -2,13 +2,30 @@ import { ActionPaperFooter } from '@app/common/components/action-paper-footer/ac
 import { ActionPaper } from '@app/common/components/action-paper/action-paper.component'
 import { Button } from '@app/common/components/button/button.component'
 import { Input } from '@app/common/components/input/input.component'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Controller } from 'react-hook-form'
 import { UpdateInfoProps } from './update-info.types'
 import { UseUpdateInfoForm } from './use-update-info-form'
 
-export const UpdateInfo: FC<UpdateInfoProps> = () => {
-	const { isSubmitting, onSubmit, control } = UseUpdateInfoForm()
+export const UpdateInfo: FC<UpdateInfoProps> = ({
+	initialValues,
+	onSubmitCallback,
+	isUpdating,
+}) => {
+	const { isSubmitting, onSubmit, control, reset } = UseUpdateInfoForm(
+		initialValues,
+		onSubmitCallback
+	)
+
+	useEffect(() => {
+		if (!isUpdating) {
+			reset({
+				name: initialValues?.name ?? '',
+				address: initialValues?.address ?? '',
+			})
+		}
+	}, [initialValues, isUpdating])
+
 	const actionPaperFooter = (
 		<ActionPaperFooter>
 			<Button type="submit" disabled={isSubmitting} onClick={onSubmit}>
@@ -16,6 +33,7 @@ export const UpdateInfo: FC<UpdateInfoProps> = () => {
 			</Button>
 		</ActionPaperFooter>
 	)
+
 	return (
 		<ActionPaper title="Персональні дані" footer={actionPaperFooter}>
 			<form className="flex gap-9" onSubmit={onSubmit}>
@@ -30,6 +48,7 @@ export const UpdateInfo: FC<UpdateInfoProps> = () => {
 								label="Телефон"
 								placeholder="Введіть телефон"
 								fullWidth
+								disabled
 							/>
 						)}
 					/>

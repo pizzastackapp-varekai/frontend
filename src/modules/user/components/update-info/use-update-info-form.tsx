@@ -3,6 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { UpdateInfoFormValues } from './update-info.types'
 import * as yup from 'yup'
+import { Customers } from '@app/core/types'
+import { toast } from 'react-toastify'
 
 const validationSchema = yup.object({
 	phoneNumber: yup
@@ -20,17 +22,33 @@ const validationSchema = yup.object({
 	}),
 })
 
-export const UseUpdateInfoForm = () => {
+export const UseUpdateInfoForm = (
+	initialValues?: Customers,
+	onSubmitCallback?: (values: UpdateInfoFormValues) => Promise<void>
+) => {
 	const {
 		control,
 		formState: { isSubmitting },
 		handleSubmit,
+		reset,
 	} = useForm<UpdateInfoFormValues>({
 		resolver: yupResolver(validationSchema),
+		defaultValues: {
+			phoneNumber: initialValues?.phone,
+			name: initialValues?.name || '',
+			address: initialValues?.address || '',
+		},
 	})
 
-	const submitForm = (values: UpdateInfoFormValues) => {
-		alert(JSON.stringify(values))
+	const submitForm = async (values: UpdateInfoFormValues) => {
+		if (onSubmitCallback) {
+			try {
+				await onSubmitCallback(values)
+				toast.success('Дані оновлені')
+			} catch (error) {
+				toast.error((error as Error).message)
+			}
+		}
 	}
 
 	const onSubmit = handleSubmit(submitForm)
@@ -38,5 +56,6 @@ export const UseUpdateInfoForm = () => {
 		control,
 		isSubmitting,
 		onSubmit,
+		reset,
 	}
 }
