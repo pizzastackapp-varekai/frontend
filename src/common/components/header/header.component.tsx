@@ -3,11 +3,11 @@ import { UserDropdown } from '@app/modules/auth/components/user-dropdown/user-dr
 import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Button } from '../button/button.component'
-
 import { HeaderCategoryLink } from '../link/link.component'
 import { Skeleton } from '../skeleton/skeleton.component'
 import { useReactiveVar } from '@apollo/client'
 import { isLoggedInReactive } from '@app/modules/auth/store/reactive-vars'
+import { ReactComponent as ShoppingCartSolidIcon } from '@app/assets/icons/shopping-cart-solid.svg'
 
 interface HeaderProps {
 	isLoading?: boolean
@@ -51,7 +51,10 @@ export const Header: FC<HeaderProps> = ({ isLoading, categories }) => {
 					</>
 				)}
 			</div>
-			<div>
+			<div className="flex gap-3 items-center">
+				<button>
+					<ShoppingCartSolidIcon className="w-6 h-6 fill-gray-900" />
+				</button>
 				{isLoggedIn ? (
 					<UserDropdown />
 				) : (

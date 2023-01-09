@@ -7,6 +7,7 @@ import { LoginPage } from '@app/modules/auth/pages/login.page'
 import { isLoggedInReactive } from './modules/auth/store/reactive-vars'
 import { useEffect } from 'react'
 import { ProfilePage } from '@app/modules/user/pages/profile.page'
+import { PrivateRoute } from './common/components/private-route/private-route.component'
 
 export const App = () => {
 	const { data, loading } = useGetCategoriesQuery()
@@ -23,7 +24,14 @@ export const App = () => {
 				<Routes>
 					<Route path="/" element={<MenuPage />} />
 					<Route path="/login" element={<LoginPage />} />
-					<Route path="/profile" element={<ProfilePage />} />
+					<Route
+						path="/profile"
+						element={
+							<PrivateRoute>
+								<ProfilePage />
+							</PrivateRoute>
+						}
+					/>
 				</Routes>
 			</div>
 			<Footer />
