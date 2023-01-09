@@ -17,6 +17,7 @@ interface ButtonProps {
 	variant?: keyof typeof ButtonVariant
 	type?: ComponentProps<'button'>['type']
 	onClick?: ComponentProps<'button'>['onClick']
+	fullWidth?: boolean
 }
 
 export const Button: FC<PropsWithChildren<ButtonProps>> = ({
@@ -24,13 +25,15 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
 	size = ButtonSize.base,
 	disabled,
 	variant = ButtonVariant.primary,
+	fullWidth = false,
 	...props
 }) => {
 	const ButtonClasses = clsx(
 		'text-sm text-gray-900 px-4 transition-all rounded-md',
 		{
+			'w-full': fullWidth,
 			'py-2': size === ButtonSize.base,
-			'py-1': size === ButtonSize.sm,
+			'py-0.5': size === ButtonSize.sm,
 			'opacity-50 cursor-not-allowed': disabled,
 			'bg-amber-400 border-amber-400 disabled:hover:bg-amber-400 disabled:hover:border-amber-400 hover:bg-amber-500':
 				variant === ButtonVariant.primary,

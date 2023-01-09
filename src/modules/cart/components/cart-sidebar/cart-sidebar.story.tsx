@@ -11,4 +11,25 @@ const Template: ComponentStory<typeof CartSidebar> = args => {
 }
 
 export const View = Template.bind({})
-View.args = {}
+View.args = {
+	items: [
+		{
+			image: 'menu/menu-1668466411',
+			title: 'Піца барбекю',
+			count: 2,
+			price: 250,
+		},
+		{
+			image: 'menu/menu-1668466411',
+			title: 'Піца барбекю',
+			count: 3,
+			price: 148,
+		},
+		{
+			image: 'menu/menu-1668466411',
+			title: 'Піца барбекю',
+			count: 1,
+			price: 100,
+		},
+	],
+}

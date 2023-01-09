@@ -13,8 +13,9 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
 			fullWidth,
 			setValue,
 			value,
-			size = InputNumberSize.m,
+			size = InputNumberSize.base,
 			onBlur,
+			hideErrorMessage = false,
 			...props
 		},
 		ref
@@ -29,7 +30,13 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
 			buttonIconsClasses,
 			inputWrapperClasses,
 			errorMarkClasses,
-		} = useInputNumberClasses(isFocused, size, error, fullWidth)
+		} = useInputNumberClasses(
+			isFocused,
+			size,
+			error,
+			fullWidth,
+			hideErrorMessage
+		)
 		const handleFocus = (e: FocusEvent<HTMLInputElement, Element>) => {
 			setIsFocused(true)
 		}
@@ -81,11 +88,12 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
 						<Plus16Icon className={buttonIconsClasses} />
 					</button>
 				</div>
-
-				<span
-					dangerouslySetInnerHTML={{ __html: error || '&nbsp;' }}
-					className="text-sm text-red-600 block"
-				/>
+				{!hideErrorMessage && (
+					<span
+						dangerouslySetInnerHTML={{ __html: error || '&nbsp;' }}
+						className="text-sm text-red-600 block mt-2"
+					/>
+				)}
 			</div>
 		)
 	}
