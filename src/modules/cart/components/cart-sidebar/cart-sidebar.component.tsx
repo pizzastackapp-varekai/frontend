@@ -9,11 +9,12 @@ import clsx from 'clsx'
 import { useOnClickOutside } from '@app/common/hooks/use-on-click-outside.hook'
 import { cartState } from '../../store/cart-state'
 import { useGetMenuItemsForCartQuery } from '@app/core/types'
+import { CartItemListLoading } from '../cart-item-list-loading/cart-item-list-loading.component'
 
 export const CartSidebar: FC = () => {
 	const isOpened = useReactiveVar(cartOpenedState)
 	const cartItems = useReactiveVar(cartState)
-	const { data, previousData } = useGetMenuItemsForCartQuery({
+	const { data, previousData, loading } = useGetMenuItemsForCartQuery({
 		variables: {
 			menuIds: Object.keys(cartItems),
 		},
@@ -53,6 +54,8 @@ export const CartSidebar: FC = () => {
 						</span>
 					</div>
 				</div>
+			) : !data && !previousData && loading ? (
+				<CartItemListLoading />
 			) : (
 				<div className="h-[calc(100%_-_3.25rem)] flex gap-6 flex-col">
 					<div className="overflow-y-auto flex gap-6 flex-col">

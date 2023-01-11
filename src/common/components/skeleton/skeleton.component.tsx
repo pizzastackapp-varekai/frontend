@@ -1,15 +1,20 @@
+import clsx from 'clsx'
 import { FC } from 'react'
 
 interface SkeletonProps {
 	width: number
 	height: number
+	roundFull?: boolean
 }
 
-export const Skeleton: FC<SkeletonProps> = ({ width, height }) => {
-	return (
-		<div
-			className="bg-gray-200 rounded-full animate-pulse h-8"
-			style={{ width, height }}
-		></div>
-	)
+export const Skeleton: FC<SkeletonProps> = ({
+	width,
+	height,
+	roundFull = true,
+}) => {
+	const classes = clsx('bg-gray-200 animate-pulse h-8', {
+		'rounded-full': roundFull,
+		'rounded-md': !roundFull,
+	})
+	return <div className={classes} style={{ width, height }}></div>
 }
