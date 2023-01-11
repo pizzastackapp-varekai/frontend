@@ -9,7 +9,6 @@ interface MenuListProps {
 
 export const MenuList: FC<MenuListProps> = ({ items }) => {
 	const { data: settings } = useGetSettingsQuery({ fetchPolicy: 'cache-only' })
-
 	return (
 		<div className="flex flex-wrap gap-10 justify-center">
 			{items.map(({ image, ...pizza }) => (

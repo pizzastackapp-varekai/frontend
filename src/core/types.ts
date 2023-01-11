@@ -2690,7 +2690,7 @@ export type GetMenuQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetMenuQuery = { __typename?: 'query_root', categories: Array<{ __typename?: 'categories', id: any, slug: string, title: string, menu_items: Array<{ __typename?: 'menu', id: any, image: string, ingredients?: string | null, price: any, title: string, weight?: any | null, category_id: any }> }> };
 
 export type GetMenuItemsForCartQueryVariables = Exact<{
-  _in: Array<Scalars['uuid']> | Scalars['uuid'];
+  menuIds: Array<Scalars['uuid']> | Scalars['uuid'];
 }>;
 
 
@@ -2901,8 +2901,8 @@ export type GetMenuQueryHookResult = ReturnType<typeof useGetMenuQuery>;
 export type GetMenuLazyQueryHookResult = ReturnType<typeof useGetMenuLazyQuery>;
 export type GetMenuQueryResult = Apollo.QueryResult<GetMenuQuery, GetMenuQueryVariables>;
 export const GetMenuItemsForCartDocument = gql`
-    query GetMenuItemsForCart($_in: [uuid!]!) {
-  menu(where: {id: {_in: $_in}}) {
+    query GetMenuItemsForCart($menuIds: [uuid!]!) {
+  menu(where: {id: {_in: $menuIds}}) {
     image
     title
     price
@@ -2923,7 +2923,7 @@ export const GetMenuItemsForCartDocument = gql`
  * @example
  * const { data, loading, error } = useGetMenuItemsForCartQuery({
  *   variables: {
- *      _in: // value for '_in'
+ *      menuIds: // value for 'menuIds'
  *   },
  * });
  */

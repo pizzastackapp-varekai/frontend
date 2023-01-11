@@ -3,16 +3,34 @@ import { InputNumber } from '@app/common/components/input-number/input-number.co
 import { useCloudinaryImage } from '@app/common/hooks/use-cloudinary-image.hook'
 import { AdvancedImage } from '@cloudinary/react'
 import { FC } from 'react'
+import {
+	changeCartItemAmount,
+	removeItemFromCart,
+} from '../../store/cart-state'
 
 interface CartItemProps {
 	image: string
 	title: string
 	count: number
 	price: number
+	menuItemId: string
 }
 
-export const CartItem: FC<CartItemProps> = ({ image, title, count, price }) => {
+export const CartItem: FC<CartItemProps> = ({
+	image,
+	title,
+	count,
+	price,
+	menuItemId,
+}) => {
 	const imageCld = useCloudinaryImage(image, ['w_128', 'h_128', 'c_fill'])
+	const handleChangeAmount = (amount: number) => {
+		changeCartItemAmount(menuItemId, amount)
+	}
+
+	const handleDeleteItem = () => {
+		removeItemFromCart(menuItemId)
+	}
 	return (
 		<div className="border-t border-gray-200 pt-6">
 			<div className="flex gap-6">
@@ -37,9 +55,11 @@ export const CartItem: FC<CartItemProps> = ({ image, title, count, price }) => {
 								size="sm"
 								fullWidth
 								value={count}
+								readOnly
+								setValue={handleChangeAmount}
 							/>
 						</div>
-						<Button variant="danger" size="sm">
+						<Button variant="danger" size="sm" onClick={handleDeleteItem}>
 							Видалити
 						</Button>
 					</div>
