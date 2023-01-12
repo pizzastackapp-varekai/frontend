@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { RadioInput } from './radio-input.component'
 
 export default {
-	title: 'Common/Radio input',
+	title: 'Form/Radio input',
 	component: RadioInput,
 } as ComponentMeta<typeof RadioInput>
 
@@ -16,4 +16,5 @@ View.args = {
 	label: 'Готівка',
 	value: 'cash',
 	name: 'payment',
+	defaultChecked: false,
 }
