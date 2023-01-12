@@ -14,7 +14,7 @@ interface TextareaProps {
 	fullWidth?: boolean
 }
 
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+export const TextArea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 	({ label, error, fullWidth, ...props }, ref) => {
 		const inputId = useId()
 
