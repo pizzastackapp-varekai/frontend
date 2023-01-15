@@ -6,6 +6,8 @@ import {
 	CheckoutFormValues,
 	UseCheckoutFormOptions,
 } from './checkout-form.types'
+import { Payment_Types_Enum } from '@app/core/types'
+import { toast } from 'react-toastify'
 const validation = yup.object({
 	name: yup.string().required('Поле обовʼязкове'),
 	phoneNumber: yup
@@ -15,27 +17,34 @@ const validation = yup.object({
 		.required('Введіть телефонний номер'),
 	address: yup.string().required('Поле обовʼязкове'),
 	comment: yup.string().notRequired(),
-	paymentType: yup.string().oneOf(['card', 'cash']),
+	paymentType: yup
+		.string()
+		.oneOf([Payment_Types_Enum.Cash, Payment_Types_Enum.Card]),
 })
 
 export const useCheckoutForm = (options?: UseCheckoutFormOptions) => {
-	const { control, handleSubmit } = useForm<CheckoutFormValues>({
+	const { control, handleSubmit, reset } = useForm<CheckoutFormValues>({
 		resolver: yupResolver(validation),
 		defaultValues: {
 			name: '',
 			address: '',
 			phoneNumber: '',
-			paymentType: 'cash',
+			paymentType: Payment_Types_Enum.Cash,
 			comment: '',
 		},
 	})
 
 	const submitForm = async (values: CheckoutFormValues) => {
 		if (options?.callback) {
-			await options.callback(values)
+			try {
+				await options.callback(values)
+				toast.success('Замовлення створено')
+			} catch (e) {
+				toast.error((e as Error).message)
+			}
 		}
 	}
 	const onSubmit = handleSubmit(submitForm)
 
-	return { control, onSubmit }
+	return { control, onSubmit, reset }
 }

@@ -1,8 +1,7 @@
-import { useReactiveVar } from '@apollo/client'
-import { useGetMenuItemsForCartQuery } from '@app/core/types'
+import { useCartItems } from '@app/modules/checkout/hooks/use-cart-items'
 import clsx from 'clsx'
 import { FC, ReactNode } from 'react'
-import { cartState } from '../../store/cart-state'
+
 import { CartItemListLoading } from '../cart-item-list-loading/cart-item-list-loading.component'
 import { CartItem } from '../cart-item/cart-item.component'
 
@@ -22,12 +21,7 @@ export const CartList: FC<CartListProps> = ({
 	scrollDisabled = false,
 	cartSumItemPosition = CartSumItemPosition.bottom,
 }) => {
-	const cartItems = useReactiveVar(cartState)
-	const { data, previousData, loading } = useGetMenuItemsForCartQuery({
-		variables: {
-			menuIds: Object.keys(cartItems),
-		},
-	})
+	const { data, previousData, loading, cartItems } = useCartItems()
 
 	const cartSum =
 		data?.menu.reduce((acc, val) => {

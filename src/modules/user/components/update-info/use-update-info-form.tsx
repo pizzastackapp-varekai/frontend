@@ -3,8 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { UpdateInfoFormValues } from './update-info.types'
 import * as yup from 'yup'
-import { Customers } from '@app/core/types'
 import { toast } from 'react-toastify'
+import { FrontCustomer } from '../../types/user'
 
 const validationSchema = yup.object({
 	phoneNumber: yup
@@ -23,7 +23,7 @@ const validationSchema = yup.object({
 })
 
 export const UseUpdateInfoForm = (
-	initialValues?: Customers,
+	initialValues?: FrontCustomer,
 	onSubmitCallback?: (values: UpdateInfoFormValues) => Promise<void>
 ) => {
 	const {
