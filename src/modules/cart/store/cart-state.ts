@@ -46,3 +46,7 @@ export const removeItemFromCart = (id: string) => {
 	delete cart[id]
 	saveCartState(cart)
 }
+
+export const cleanCart = () => {
+	saveCartState({})
+}
